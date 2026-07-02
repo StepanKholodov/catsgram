@@ -35,6 +35,8 @@ build/
 
 ### VS Code ###
 .vscode/
-
+volumes/
+src/main/resources/images/
+target/
 ### Mac OS ###
 .DS_Store
