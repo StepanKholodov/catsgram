@@ -1,8 +1,10 @@
 package ru.yandex.practicum.catsgram.dto.image;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+/**
+ * Представление изображения, отдаваемое клиенту.
+ */
 @Data
 public class ImageDto {
     private long id;

@@ -1,6 +1,5 @@
 package ru.yandex.practicum.catsgram.controller;
 
-import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.catsgram.dto.post.NewPostRequest;
@@ -11,7 +10,9 @@ import ru.yandex.practicum.catsgram.service.PostService;
 
 import java.util.Collection;
 
-@Log4j2
+/**
+ * REST-контроллер для операций с постами.
+ */
 @RestController
 @RequestMapping("/posts")
 public class PostController {
@@ -21,6 +22,14 @@ public class PostController {
         this.postService = postService;
     }
 
+    /**
+     * Возвращает страницу постов с заданной сортировкой.
+     *
+     * @param from смещение от начала списка
+     * @param size размер страницы, должен быть больше нуля
+     * @param sort направление сортировки: asc или desc
+     * @return страница постов
+     */
     @GetMapping()
     public Collection<PostDto> findAll(@RequestParam(defaultValue = "0") Integer from,
                                        @RequestParam(defaultValue = "10") Integer size,
@@ -41,19 +50,37 @@ public class PostController {
         return postService.findAll(from, size, sort);
     }
 
+    /**
+     * Создаёт новый пост.
+     *
+     * @param post данные нового поста
+     * @return созданный пост
+     */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public PostDto create(@RequestBody NewPostRequest post) {
         return postService.create(post);
     }
 
-    @PutMapping("{postId}")
+    /**
+     * Обновляет существующий пост.
+     *
+     * @param postId идентификатор поста
+     * @param post новые данные поста
+     * @return обновлённый пост
+     */
+    @PutMapping("/{postId}")
     public PostDto update(@PathVariable("postId") long postId, @RequestBody UpdatePostRequest post) {
-        log.info("запустили метод обновления поста с id={}",postId);
         return postService.update(postId, post);
     }
 
-    @GetMapping("{id}")
+    /**
+     * Возвращает пост по идентификатору.
+     *
+     * @param id идентификатор поста
+     * @return найденный пост
+     */
+    @GetMapping("/{id}")
     public PostDto getById(@PathVariable Long id) {
         return postService.findById(id);
     }

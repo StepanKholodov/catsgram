@@ -1,21 +1,17 @@
-# первый (вспомогательный) этап с именем builder
 FROM amazoncorretto:21-alpine as builder
-# устанавливаем application в качестве рабочей директории
+WORKDIR /app
+COPY . .
+RUN ./mvnw package -DskipTests
+
+
+FROM amazoncorretto:21-alpine AS layertools
 WORKDIR application
-# копируем артефакт в папку application в контейнере
-COPY target/*.jar app.jar
-# используем специальный режим запуска Spring Boot приложения,
-# который активирует распаковку итогового jar-файла на составляющие
+COPY --from=builder /app/target/*.jar app.jar
 RUN java -Djarmode=layertools -jar app.jar extract
 
-# заключительный этап, создающий финальный образ
 FROM amazoncorretto:21-alpine
-# поочерёдно копируем необходимые для приложения файлы,
-# которые были распакованы из артефакта на предыдущем этапе;
-# при этом каждая инструкция COPY создаёт новый слой
-COPY --from=builder /application/dependencies/ ./
-COPY --from=builder /application/spring-boot-loader/ ./
-COPY --from=builder /application/snapshot-dependencies/ ./
-COPY --from=builder /application/application ./
-# в качестве команды указываем запуск специального загрузчика
+COPY --from=layertools /application/dependencies/ ./
+COPY --from=layertools /application/spring-boot-loader/ ./
+COPY --from=layertools /application/snapshot-dependencies/ ./
+COPY --from=layertools /application/application/ ./
 ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]

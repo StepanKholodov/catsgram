@@ -6,6 +6,9 @@ import lombok.EqualsAndHashCode;
 import java.time.Instant;
 
 
+/**
+ * Модель поста, хранимая в таблице {@code posts}.
+ */
 @Data
 @EqualsAndHashCode(of = {"id"})
 

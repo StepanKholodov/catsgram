@@ -3,13 +3,15 @@ package ru.yandex.practicum.catsgram.dal;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import ru.yandex.practicum.catsgram.exception.InternalServerException;
 import ru.yandex.practicum.catsgram.model.User;
 
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Репозиторий для операций с пользователями в БД.
+ */
 @Repository
 public class UserRepository extends BaseRepository<User> {
     private static final String FIND_ALL_QUERY = "SELECT * FROM users";
@@ -23,19 +25,42 @@ public class UserRepository extends BaseRepository<User> {
         super(jdbc, mapper);
     }
 
+    /**
+     * Возвращает всех пользователей.
+     *
+     * @return список пользователей
+     */
     public List<User> findAll() {
         return findMany(FIND_ALL_QUERY);
     }
 
+    /**
+     * Ищет пользователя по email.
+     *
+     * @param email адрес электронной почты
+     * @return найденный пользователь либо {@link Optional#empty()}
+     */
     public Optional<User> findByEmail(String email) {
         return findOne(FIND_BY_EMAIL_QUERY, email);
     }
 
+    /**
+     * Ищет пользователя по идентификатору.
+     *
+     * @param userId идентификатор пользователя
+     * @return найденный пользователь либо {@link Optional#empty()}
+     */
     public Optional<User> findById(long userId) {
         return findOne(FIND_BY_ID_QUERY, userId);
     }
 
-    public User save(User user){
+    /**
+     * Сохраняет нового пользователя и присваивает ему сгенерированный идентификатор.
+     *
+     * @param user данные пользователя для сохранения
+     * @return сохранённый пользователь с заполненным id
+     */
+    public User save(User user) {
         long id = insert(
                 INSERT_QUERY,
                 user.getUsername(),
@@ -47,7 +72,13 @@ public class UserRepository extends BaseRepository<User> {
         return user;
     }
 
-    public User update(User user)  {
+    /**
+     * Обновляет данные существующего пользователя.
+     *
+     * @param user пользователь с новыми данными
+     * @return обновлённый пользователь
+     */
+    public User update(User user) {
         update(
                 UPDATE_QUERY,
                 user.getUsername(),

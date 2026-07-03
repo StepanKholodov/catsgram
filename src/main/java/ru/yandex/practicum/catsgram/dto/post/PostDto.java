@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.time.Instant;
+
+/**
+ * Представление поста, отдаваемое клиенту.
+ */
 @Data
 public class PostDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)

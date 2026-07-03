@@ -8,8 +8,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+/**
+ * Преобразует строку {@link ResultSet} таблицы {@code users} в модель {@link User}.
+ */
 @Component
 public class UserRowMapper implements RowMapper<User> {
+
+    /**
+     * Читает текущую строку результата и создаёт из неё пользователя.
+     *
+     * @param resultSet результат SQL-запроса
+     * @param rowNum номер строки
+     * @return созданный пользователь
+     * @throws SQLException при ошибке чтения данных из {@link ResultSet}
+     */
     @Override
     public User mapRow(ResultSet resultSet, int rowNum) throws SQLException {
         User user = new User();

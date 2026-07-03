@@ -31,8 +31,8 @@ services:
           CREATE TABLE IF NOT EXISTS users (
             id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
             username VARCHAR(40) NOT NULL,
-            email VARCHAR(255) NOT NULL,
-            password VARCHAR(40) NOT NULL,
+            email VARCHAR(255) UNIQUE NOT NULL ,
+            password VARCHAR(255) NOT NULL,
             registration_date TIMESTAMP WITH TIME ZONE NOT NULL
           );
         
@@ -50,3 +50,20 @@ services:
             post_id BIGINT NOT NULL REFERENCES posts(id)
           );
         EOSQL
+
+  app:
+    restart: unless-stopped
+    build: .
+    container_name: catsgram-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
+    environment:
+      - DB_URL=jdbc:postgresql://db:5432/catsgram
+      - DB_USER=dbuser
+      - DB_PASSWORD=12345
+      - IMAGE_DIR=/app/images
+    volumes:
+      - ./volumes/images:/app/images

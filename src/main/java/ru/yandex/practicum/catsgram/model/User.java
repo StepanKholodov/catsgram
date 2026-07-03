@@ -5,6 +5,9 @@ import lombok.EqualsAndHashCode;
 
 import java.time.Instant;
 
+/**
+ * Модель пользователя, хранимая в таблице {@code users}.
+ */
 @Data
 @EqualsAndHashCode(of = {"email"})
 public class User {

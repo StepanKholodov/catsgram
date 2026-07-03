@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.time.Instant;
 
+/**
+ * Представление пользователя, отдаваемое клиенту (без пароля).
+ */
 @Data
 public class UserDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
